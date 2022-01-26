@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<center><h1>QUẢN LÝ TÀI CHÍNH CÁ NHÂN</h1></center>
+<CENTER>
+  <h3>Thu nhập của bạn</h3>
+  <input id="thunhap" placeholder="Nhập số tiền bạn kiếm được">vnd <br>
+  <h3>Nhập số tiền bạn muốn tiết kiệm </h3>
+  <input type="number" id="tk">vnd
+  <h3>Đồ dùng bạn đã mua</h3>
+  <input id="spMoi" placeholder="Nhập sản phảm bạn đã mua">
+  <input id="gia" placeholder="giá của sản phẩm">
+  <input id="ngaythang" placeholder="Nhập ngày tháng mua sản phẩm">
+  <button onclick="ThemSPMoi()">Thêm</button>
+  <div id="noidung">
+    <table border="1">
+      <th style="width: 300px; height: 36px">Tên đồ dùng</th>
+      <th  style="width: 300px; height: 36px">Giá tiền</th>
+      <th  style="width: 300px; height: 36px">Ngày tháng</th>
+      <th  style="width: 200px; height: 36px">Sửa</th>
+      <th  style="width: 200px; height: 36px">Xóa</th>
+    </table>
+  </div>
+  <button onclick="tinhtoan()">tính toán</button>
+  <H3>Số tiền còn lại là: <span id="a"></span> vnd</H3>
+</CENTER>
+<script>
+  class DoDung {
+    constructor(ten, gia, date) {
+      this.ten = ten;
+      this.gia = gia;
+      this.date = date;
+    }
+  }
+  let sp = [];
+  let chi ;
+  let tong;
+  let tk;
+  let c;
+  function ThemSPMoi() {
+    chi = 0;
+    let ten = document.getElementById("spMoi").value;
+    let gia = document.getElementById("gia").value;
+    let date = document.getElementById("ngaythang").value;
+    let themsp = new DoDung(ten, gia, date);
+    sp.push(themsp);
+    hienthi();
+    document.getElementById("spMoi").value = "";
+  }
+  function hienthi() {
+
+    let noidung = "<table border=\"\">\n" +
+            "  <tr>\n" +
+            "    <th style=\"width: 300px; height: 36px\">Tên đồ dùng</th>\n" +
+            "    <th style=\"width: 300px; height: 36px\">Giá tiền</th>\n" +
+            "    <th style=\"width: 300px; height: 36px\">Ngày tháng</th>\n" +
+            "    <th style=\"width: 200px; height: 36px\">Sửa</th>\n" +
+            "    <th style=\"width: 200px; height: 36px\">Xóa</th>\n" +
+            "  </tr>" ;
+
+    for (let i = 0; i < sp.length; i++) {
+      let temp = "<tr>" +
+              "      <td style=\"width: 300px; height: 36px\">"+ sp[i].ten+"</td>" +
+              "      <td style=\"width: 300px; height: 36px\">"+ sp[i].gia+"</td>" +
+              "      <td style=\"width: 300px; height: 36px\">"+ sp[i].date+"</td>" +
+              "      <td style=\"width: 200px; height: 36px\"><button style='height: 34px;width: 200px' onclick='suasanpham("+i+")'>Edit</button></td>" +
+              "      <td style=\"width: 200px; height: 36px\"><button style='height: 34px;width: 200px' onclick='xoasanpham("+i+")'>Xóa</button></td>" +
+              "    </tr>" ;
+      noidung += temp;
+    }
+    noidung += "</table>";
+    document.getElementById("noidung").innerHTML = noidung;
+  }
+  function xoasanpham (index) {
+    sp.splice(index, 1);
+    hienthi();
+  }
+  function suasanpham(index){
+    let tenmoi = prompt("Mời bạn nhập tên sản phẩm", sp[index].ten);
+    let giamoi = prompt("Mời bạn nhập lại giá",sp[index].gia);
+    let newdate = prompt("mời bạn nhập ngày", sp[index].date);
+    sp[index].ten = tenmoi;
+    sp[index].gia = giamoi;
+    sp[index].date = newdate;
+    hienthi()
+  }
+  function tinhtoan(){
+    tong = document.getElementById("thunhap").value;
+    tk = document.getElementById("tk").value;
+    c = tong - tk;
+    console.log(c)
+    chi = 0;
+    for (let j = 0; j < sp.length; j++) {
+      chi = chi + Number(sp[j].gia);
+      console.log(chi);
+    }
+    c = c - chi;
+    if (c < 0){
+      alert("Bạn đã dùng vào số tiền muốn tiết kiệm!!! bạn có muốn tiếp tục");
+      document.getElementById("a").innerText = c;
+    } else {document.getElementById("a").innerText = c;
+    }
+  }
+</script>
+</body>
+</html>
